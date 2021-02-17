@@ -86,6 +86,46 @@ class BinarySearchTree:
     def _increase_depth(self, new_depth):
         self.depth = new_depth
 
+    def search_for(self, value):
+        """
+        Returns True if the values exist in the tree, False if not
+        Also included a depth tracker to show what depth the value is at (if found)
+        NOTE:
+        returning True/False is kind of boring so might actually implement k,v node so that
+        if the key is found this can print Node {key} exist with value {value}
+        """
+        print("Searching for {0}".format(value))
+        if self.root:
+            return self._search_for(value, self.root, 0)
+        else:
+            print("Searching Empty Tree")
+            return False
+
+    def _search_for(self, value, node, search_depth):
+        """
+        recursively trawl through the tree until we find the node or know that it does not exist
+        """
+        if node.value == value:
+            # if the node('s value) has been found
+            print("{0} FOUND at depth {1}".format(value, search_depth))
+            return True
+        else:
+            # node hasn't been found yet
+
+            if node.left and value < node.value:
+                # if the value we're searching for is less than the current nodes value
+                return self._search_for(value, node.left, search_depth+1)
+
+            elif node.right and value > node.value:
+                # if the value we're searching for is greater than the current nodes value
+                return self._search_for(value, node.right, search_depth+1)
+
+            else:
+                # otherwise we've searched the whole tree (or at least only what needs to be searched)
+                # and have not found our value
+                print("{0} is not in the Tree".format(value))
+                return False
+
     def print_tree(self):
         # if there is a root, go into the recursive private function to begin printing tree
         # printing depth (0 here) is included so as to print what depth a particular node is at
@@ -131,12 +171,12 @@ class BinarySearchTree:
         return max(left_height, right_height)
 
 
-def run(list_of_values):
+def run(list_of_values, search_terms):
     """
     function to run program
     """
 
-    print("Values List Length: {0}".format(len(list_of_values)))  # 50 by default
+    print("Values List Length: {0}".format(len(list_of_values)))  # 30 by default
     print("Values: {0}".format(str(list_of_values)))              # unordered list
     print()
 
@@ -157,6 +197,10 @@ def run(list_of_values):
     print("Tree Depth: {0}".format(bst.depth))
     print()
 
+    for search_val in search_terms:
+        bst.search_for(search_val)
+        print()
+
 
 """
 RUN PROGRAM
@@ -165,7 +209,11 @@ RUN PROGRAM
 """
 
 # produce 100 random numbers (with duplicates)
-values = [random.randint(1, 100) for each in range(50)]
+values = [random.randint(1, 50) for each in range(30)]
 # values = [40,12,5,40,4,6,45,76,72,93]     # put in manual stuff if you want
 
-run(values)         # values should now be output in order
+# put in the values you want to check for in the tree
+# keeping this manual so you know what you're checking for on multiple runs
+search_for_these_values = [5,10,6,21,33,45,32,1]
+
+run(values, search_for_these_values)         # values should now be output in order
